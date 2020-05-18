@@ -1,0 +1,98 @@
+
+#Importing Required Libraries
+
+from tkinter import *
+import random
+from tkinter import messagebox
+import time
+
+color=["red","yellow","brown","blue","orange","purple","pink","black","green"]
+
+
+class Color:
+    def __init__(self,master):
+        self.count=0
+        self.col=random.choice(color)
+        self.timevar=31
+        self.structure(master)
+        self.countdown()
+        self.rr=master
+        
+        
+    def structure(self,master):
+ 
+        """ Instruction Label """
+ 
+        # Create instruction label for Program
+        self.inst_lbl = Label(master, text = "Welcome to Color Game!")
+        self.inst_lbl.grid(row = 0, column = 0, columnspan = 2, sticky = W)
+        # Create a space  
+        self.gap2_lbl1 = Label(master, text = " ")
+        self.gap2_lbl1.grid(row = 1, column = 0, sticky = W)
+        #Create label to display Score
+        self.score = Label(master, text ="Score: "+str(self.count))
+        self.score.grid(row = 1, column = 0, sticky = W)
+        
+ 
+        # Create label for Display color with word  
+        self.display_lbl = Label(master, text =random.choice(color),fg=self.col,font=("Courier", 30))
+        self.display_lbl.grid(row = 2, column = 0, sticky = W)
+
+        # Create label for Display timer  
+        self.timer = Label(master, text ="")
+        self.timer.grid(row = 3, column = 1, columnspan = 2)
+
+        # Create entry widget to accept Color Name  
+        self.col_ent = Entry(master)
+        self.col_ent.grid(row = 4, column =0, sticky = W)
+        self.col_ent.focus()
+
+        
+        # Create a space  
+        self.gap2_lbl1 = Label(master, text = " ")
+        self.gap2_lbl1.grid(row = 5, column = 0, sticky = W)
+
+        # Creating a submit button
+        self.submit_bttn = Button(master, text = "Submit",command=self.submit)
+        self.submit_bttn.grid(row = 6, column =0, sticky = W)
+ 
+        master.bind('<Return>',self.submit)   
+        
+        """ RESET """
+         
+        # Creating a reset button
+        self.reset_bttn = Button(master, text = "Reset",command=self.reset)
+        self.reset_bttn.grid(row = 6, column = 2, sticky = W)
+    
+    def changecolor(self):
+        self.col=random.choice(color)
+        self.display_lbl.config(text=random.choice(color),fg=self.col)
+        self.col_ent.delete(0, 'end')
+    def reset(self):
+        self.col_ent.delete(0, 'end')
+    
+    def countdown(self):
+        if self.timevar > 0: 
+            self.timevar -= 1
+          
+            self.timer.config(text = "Time left: "+ str(self.timevar))
+            self.timer.after(1000, self.countdown)
+        else:
+            messagebox.showinfo("Hello", "Your Score "+str(self.count))
+            self.rr.destroy()         
+
+    def submit(self,*args):
+        if(self.col_ent.get()==self.col):
+            self.count+=1
+            self.score.config(text ="Score: "+str(self.count))
+        self.changecolor()
+        self.col_ent.focus()
+        
+
+
+
+root = Tk()
+root.title("Color Game")
+root.geometry("300x250")
+app = Color(root)
+root.mainloop()
